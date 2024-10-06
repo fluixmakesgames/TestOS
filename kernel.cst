@@ -1,0 +1,24 @@
+asm org 0x1000
+func start:
+    call newline
+   asm mov ah, 0x0e
+   asm mov al, '$'
+   asm int 0x10
+   jmp $
+
+func newline:
+    asm mov  bx, 0007h  ; BH is DisplayPage, BL is GraphicsColor
+    asm mov  ax, 0E0Dh  ; AH is Teletype, AL is CarriageReturn
+    asm int  10h
+    asm mov  al, 0Ah    ; AL is Linefeed 
+    asm int  10h
+    asm mov  cx, 80     ; Length of the row (assuming screen is 80x25)
+    asm mov  bx, 0007h  ; BH is DisplayPage, BL is ColorAttribute
+    asm mov  ax, 0920h  ; AH is WriteCharacter, AL is SpaceCharacter
+    asm int  10h
+end
+
+
+
+asm times 512-($-$$) db 0
+dw 0xAA55
